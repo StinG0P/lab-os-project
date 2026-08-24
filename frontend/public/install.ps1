@@ -3,27 +3,21 @@ param (
     [string]$token
 )
 
-# Extract system telemetry using standard PowerShell commands
+# Extract system telemetry
 $hostname = $env:COMPUTERNAME
-$os = (Get-CimInstance Win32_OperatingSystem).Caption
-$cpu = (Get-CimInstance Win32_Processor).Name
-$total_ram = [Math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1MB)
 
 $body = @{
-    hostname = $hostname
-    os = $os
-    cpu = $cpu
-    ram_total_mb = $total_ram
+    org_token = $token
+    hostname  = $hostname
 } | ConvertTo-Json
 
 $headers = @{
-    "Authorization" = "Bearer $token"
     "Content-Type" = "application/json"
 }
 
 Write-Host "[+] Registering Windows node..."
 try {
-    $response = Invoke-RestMethod -Uri "https://lab-os-project-1.onrender.com/api/v1/machines" -Method Post -Body $body -Headers $headers
+    $response = Invoke-RestMethod -Uri "https://lab-os-project-1.onrender.com/api/v1/agent/register" -Method Post -Body $body -Headers $headers
     Write-Host "[+] SUCCESS: Node registered successfully!"
     Write-Host ($response | Out-String)
 } catch {

@@ -55,4 +55,4 @@ app.use(errorHandler);
 startOfflineMonitor();
 
 // Start server
-app.listen(5000, () => console.log("✅ API Server LIVE on http://localhost:5000"));
+app.listen(PORT, () => console.log(`✅ API Server LIVE on port ${PORT}`));
