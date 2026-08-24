@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const [copied, setCopied] = useState(false);
   const [orgId, setOrgId] = useState("YOUR_ORG_TOKEN");
   const [exporting, setExporting] = useState(false);
+  const [activeTab, setActiveTab] = useState<"linux" | "windows">("linux");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -47,7 +48,10 @@ export default function DashboardPage() {
   };
 
   const handleCopy = () => {
-    const script = `curl -sSL https://yourdomain.com/install.sh | sudo bash -s -- --token=${orgId}`;
+    const script =
+      activeTab === "linux"
+        ? `curl -sSL https://yourdomain.com/install.sh | sudo bash -s -- --token=${orgId}`
+        : `Invoke-WebRequest -Uri "https://lab-os-project-512x.vercel.app/install.ps1" -OutFile "install.ps1"; .\\install.ps1 -token "${orgId}"`;
     navigator.clipboard.writeText(script);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -161,7 +165,7 @@ export default function DashboardPage() {
             <Terminal className="h-6 w-6" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-white">
+            <h3 className="text-xl font-semibold text-white font-shareTech tracking-wider">
               No Registered Machines
             </h3>
             <p className="text-sm text-slate-400 max-w-md mx-auto">
@@ -169,13 +173,45 @@ export default function DashboardPage() {
             </p>
           </div>
 
+          {/* OS Platform Tabs */}
+          <div className="flex justify-center border-b border-slate-800 max-w-xs mx-auto">
+            <button
+              onClick={() => {
+                setActiveTab("linux");
+                setCopied(false);
+              }}
+              className={`pb-2 px-4 text-xs font-mono font-bold transition-all border-b-2 ${
+                activeTab === "linux"
+                  ? "border-[#00ffcc] text-[#00ffcc]"
+                  : "border-transparent text-slate-400 hover:text-white"
+              }`}
+            >
+              Linux / Mac
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("windows");
+                setCopied(false);
+              }}
+              className={`pb-2 px-4 text-xs font-mono font-bold transition-all border-b-2 ${
+                activeTab === "windows"
+                  ? "border-[#00ffcc] text-[#00ffcc]"
+                  : "border-transparent text-slate-400 hover:text-white"
+              }`}
+            >
+              Windows
+            </button>
+          </div>
+
           <div className="relative mt-4 flex items-center justify-between gap-4 rounded-lg bg-slate-950 px-4 py-3 border border-slate-800 text-left font-mono text-xs text-slate-300">
             <span className="truncate pr-4">
-              curl -sSL https://yourdomain.com/install.sh | sudo bash -s -- --token={orgId}
+              {activeTab === "linux"
+                ? `curl -sSL https://yourdomain.com/install.sh | sudo bash -s -- --token=${orgId}`
+                : `Invoke-WebRequest -Uri "https://lab-os-project-512x.vercel.app/install.ps1" -OutFile "install.ps1"; .\\install.ps1 -token "${orgId}"`}
             </span>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 rounded bg-slate-800 hover:bg-slate-700 px-3 py-1.5 text-xs text-white transition-colors"
+              className="flex items-center gap-1.5 rounded bg-slate-800 hover:bg-slate-700 px-3 py-1.5 text-xs text-white transition-colors shrink-0"
             >
               {copied ? (
                 <>
