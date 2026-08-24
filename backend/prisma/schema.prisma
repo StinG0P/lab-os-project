@@ -23,6 +23,7 @@ model Admin {
   organization  Organization @relation(fields: [org_id], references: [id])
   email         String       @unique
   password_hash String
+  role          String       @default("TECH")
   created_at    DateTime     @default(now())
 }
 

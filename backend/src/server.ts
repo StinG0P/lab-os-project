@@ -9,6 +9,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 import authRoutes from "./routes/authRoutes";
 import agentRoutes from "./routes/agentRoutes";
 import machineRoutes from "./routes/machineRoutes";
+import teamRoutes from "./routes/teamRoutes";
 import { startOfflineMonitor } from "./jobs/offlineMonitor";
 
 const app = express();
@@ -45,6 +46,7 @@ app.get("/api/v1/health", (req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/agent", agentRoutes);
 app.use("/api/v1/machines", machineRoutes);
+app.use("/api/v1/team", teamRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

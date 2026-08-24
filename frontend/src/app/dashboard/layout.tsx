@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Monitor, Settings, LogOut } from "lucide-react";
+import { Monitor, Settings, LogOut, Users } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -36,10 +36,17 @@ export default function DashboardLayout({
             <nav className="space-y-2">
               <Link
                 href="/dashboard"
-                className="flex items-center gap-3 rounded-lg bg-slate-800/50 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800/50 hover:text-white"
               >
                 <Monitor className="h-5 w-5 text-emerald-500" />
                 Inventory
+              </Link>
+              <Link
+                href="/dashboard/team"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800/50 hover:text-white"
+              >
+                <Users className="h-5 w-5" />
+                Team
               </Link>
               <Link
                 href="/dashboard/settings"
