@@ -1,0 +1,2 @@
+# Placeholder for the compiled Go agent binary.
+# In production, compile the Go binary for the target Linux architecture (e.g. env GOOS=linux GOARCH=amd64 go build -o lab-agent) and place it here.

@@ -1,0 +1,62 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Organization {
+  id         String    @id @default(uuid())
+  name       String
+  org_token  String    @unique
+  created_at DateTime  @default(now())
+  admins     Admin[]
+  machines   Machine[]
+
+  @@index([org_token])
+}
+
+model Admin {
+  id            String       @id @default(uuid())
+  org_id        String
+  organization  Organization @relation(fields: [org_id], references: [id])
+  email         String       @unique
+  password_hash String
+  created_at    DateTime     @default(now())
+}
+
+model Machine {
+  id              String            @id @default(uuid())
+  org_id          String
+  organization    Organization      @relation(fields: [org_id], references: [id])
+  hostname        String
+  machine_token   String            @unique
+  status          String            @default("offline")
+  last_checkin_at DateTime          @default(now())
+  snapshots       MachineSnapshot[]
+}
+
+model MachineSnapshot {
+  id                 String   @id @default(uuid())
+  machine_id         String
+  machine            Machine  @relation(fields: [machine_id], references: [id])
+  cpu_model          String
+  cpu_cores          Int
+  ram_total_mb       Int
+  ram_used_mb        Int
+  disk_json          Json
+  os_name            String
+  os_version         String
+  kernel_version     String
+  installed_packages Json
+  ip_address         String
+  mac_address        String
+  uptime_seconds     Int
+  last_user          String
+  recorded_at        DateTime @default(now())
+
+  @@index([machine_id])
+  @@index([recorded_at])
+}
+
